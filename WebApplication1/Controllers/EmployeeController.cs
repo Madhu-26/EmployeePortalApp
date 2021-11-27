@@ -41,7 +41,7 @@ namespace WebApplication1.Controllers
                 string query = @" insert into dbo.Employee values 
                 ('" + emp.EmployeeName + @"'
                 ,'" + emp.Department + @"'
-                ,'" + emp.DateofJoin + @"'
+                ,'" + emp.DateOfJoin + @"'
                 ,'" + emp.PhotoFileName + @"'
                 ) 
                 ";
@@ -72,7 +72,7 @@ namespace WebApplication1.Controllers
                 string query = @" update dbo.Employee set 
                                 EmployeeName = '" + emp.EmployeeName + @"' 
                                 ,Department = '" + emp.Department + @"'
-                                ,DateofJoin = '" + emp.DateofJoin + @"'
+                                ,DateOfJoin = '" + emp.DateOfJoin + @"'
                                 ,PhotoFileName = '" + emp.PhotoFileName + @"'
                                 where EmployeeID = " + emp.EmployeeID + @"";
                 DataTable table = new DataTable();
