@@ -10,7 +10,7 @@ namespace WebApplication1.Models
         public int EmployeeID { get; set; }
         public string EmployeeName { get; set; }
         public string Department { get; set; }
-        public string DateofJoin { get; set; }
+        public string DateOfJoin { get; set; }
         public string PhotoFileName { get; set; }
 
     }
