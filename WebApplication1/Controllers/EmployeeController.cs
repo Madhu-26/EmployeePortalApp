@@ -30,7 +30,7 @@ namespace WebApplication1.Controllers
                 da.Fill(table);
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK, table);
+            return Request.CreateResponse(HttpStatusCode.OK, table);  
         }
 
         //Post

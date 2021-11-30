@@ -30,9 +30,11 @@ export class ShowEmpComponent implements OnInit {
     }
     this.ModalTitle="Add Employee";
     this.ActivateAddEditEmpComp=true;
+    // console.log(this.emp.PhotoFileName);
   }
 
   editClick(item: any){
+    console.log(item);
     this.emp=item;
     this.ModalTitle="Edit Employee";
     this.ActivateAddEditEmpComp=true;
@@ -43,6 +45,7 @@ export class ShowEmpComponent implements OnInit {
       this.service.deleteEmployee(item.EmployeeID).subscribe(data=>{
         alert(data.toString());
         this.refreshEmpList();
+        console.log("helloooooooo")
       })
     }
   }
