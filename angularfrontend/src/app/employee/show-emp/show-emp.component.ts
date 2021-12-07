@@ -16,8 +16,8 @@ export class ShowEmpComponent implements OnInit {
   ActivateAddEditEmpComp:boolean=false; 
   emp:any;
 
-  EmployeeIDFilter: string = " ";
-  EmployeeNameFilter: string = " ";
+  EmployeeIDFilter!: string;
+  EmployeeNameFilter!: string;
   EmployeeListWithoutFilter: any=[];
 
   ngOnInit(): void {

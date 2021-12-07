@@ -16,8 +16,8 @@ export class ShowDepComponent implements OnInit {
   ActivateAddEditDepComp:boolean=false; 
   dep:any;
 
-  DepartmentIDFilter: string = " ";
-  DepartmentNameFilter: string = " ";
+  DepartmentIDFilter!: string;
+  DepartmentNameFilter!: string;
   DepartmentListWithoutFilter: any=[];
 
   ngOnInit(): void {

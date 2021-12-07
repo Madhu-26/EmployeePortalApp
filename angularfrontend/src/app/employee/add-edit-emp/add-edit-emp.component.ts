@@ -16,7 +16,7 @@ export class AddEditEmpComponent implements OnInit {
   Department!: string;
   DateOfJoin!: string;
   PhotoFileName!: string;
-  PhotoFilePath!: string
+  PhotoFilePath!: string;
 
   DepartmentsList: any=[];
 
