@@ -14,6 +14,7 @@ import { AddEditEmpComponent } from './employee/add-edit-emp/add-edit-emp.compon
 import { SharedserviceService } from './sharedservice.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatPaginatorModule
   ],
   providers: [SharedserviceService],
   bootstrap: [AppComponent]
