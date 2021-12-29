@@ -12,7 +12,7 @@ namespace WebApplication1
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-
+            
             // Web API routes
             config.MapHttpAttributeRoutes();
 
@@ -24,7 +24,9 @@ namespace WebApplication1
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
 
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
+
         }
     }
 }

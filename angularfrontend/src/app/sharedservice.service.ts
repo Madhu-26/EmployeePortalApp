@@ -23,6 +23,7 @@ readonly PhotoUrl = "http://localhost:62313/Photos/";
     return this.http.put(this.APIUrl+'/Department',val);
   }
 
+
   deleteDepartment(val:any){
     return this.http.delete(this.APIUrl+'/Department/'+val);
   }
@@ -37,7 +38,7 @@ readonly PhotoUrl = "http://localhost:62313/Photos/";
 
   updateEmployee(val:any){
     return this.http.put(this.APIUrl+'/Employee',val);
-  }
+  }   
 
   deleteEmployee(val:any){
     return this.http.delete(this.APIUrl+'/Employee/'+val);

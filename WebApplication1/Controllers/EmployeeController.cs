@@ -1,144 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using System.Data;
-using System.Data.SqlClient;
-using WebApplication1.Models;
-using System.Configuration;
 using System.Web;
+using System.Web.Http;
+using System.Web.Http.Description;
+using WebApplication1.Models;
+using System.Web.Http.Cors;
 
 namespace WebApplication1.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class EmployeeController : ApiController
     {
-        //Get
-        public HttpResponseMessage Get()
+        private Model1 db = new Model1();
+
+        // GET: api/Employee
+        public IQueryable<Employee> GetEmployees()
         {
-            string query = @"select EmployeeID, EmployeeName, Department, 
-                             convert(varchar(10),DateOfJoin,120) as DateOfJoin , PhotoFileName from dbo.Employee";
-            DataTable table = new DataTable();
-
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-            using (var cmd = new SqlCommand(query, con))
-            using (var da = new SqlDataAdapter(cmd))
-            {
-                cmd.CommandType = CommandType.Text;
-                da.Fill(table);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, table);  
+            return db.Employees;
         }
 
-        //Post
-        public string Post(Employee emp)
+        // PUT: api/Employee/5
+        [ResponseType(typeof(void))]
+       [HttpPut]
+       [Route("api/Employee/{id}")]
+        public IHttpActionResult PutEmployee(int id, Employee employee)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != employee.EmployeeID)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(employee).State = EntityState.Modified;
+
             try
             {
-                string query = @" insert into dbo.Employee values 
-                ('" + emp.EmployeeName + @"'
-                ,'" + emp.Department + @"'
-                ,'" + emp.DateOfJoin + @"'
-                ,'" + emp.PhotoFileName + @"'
-                ) 
-                ";
-                DataTable table = new DataTable();
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Added Successfully!!!";
+                db.SaveChanges();
             }
-            catch (Exception)
+            catch (DbUpdateConcurrencyException)
             {
-                return "Failed to Add!!!";
+                if (!EmployeeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
-        //Put
-        public string Put(Employee emp)
+        // POST: api/Employee
+        [ResponseType(typeof(Employee))]
+        public IHttpActionResult PostEmployee(Employee employee)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                string query = @" update dbo.Employee set 
-                                EmployeeName = '" + emp.EmployeeName + @"' 
-                                ,Department = '" + emp.Department + @"'
-                                ,DateOfJoin = '" + emp.DateOfJoin + @"'
-                                ,PhotoFileName = '" + emp.PhotoFileName + @"'
-                                where EmployeeID = " + emp.EmployeeID + @"";
-                DataTable table = new DataTable();
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Updated Successfully!!!";
+                return BadRequest(ModelState);
             }
-            catch (Exception)
-            {
-                return "Failed to Update!!!";
-            }
+
+            db.Employees.Add(employee);
+            db.SaveChanges();
+
+            return CreatedAtRoute("DefaultApi", new { id = employee.EmployeeID }, employee);
         }
 
-        //Delete
-        public string Delete(int id)
+        // DELETE: api/Employee/5
+        [ResponseType(typeof(Employee))]
+        public IHttpActionResult DeleteEmployee(int id)
         {
-            try
+            Employee employee = db.Employees.Find(id);
+            if (employee == null)
             {
-                string query = @" delete from dbo.Employee where EmployeeID = " + id + @"";
-                DataTable table = new DataTable();
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Deleted Successfully!!!";
+                return NotFound();
             }
-            catch (Exception)
-            {
-                return "Failed to Delete!!!";
-            }
+
+            db.Employees.Remove(employee);
+            db.SaveChanges();
+
+            return Ok(employee);
         }
 
         [Route("api/Employee/GetAllDepartmentNames")]
-        [HttpGet]
-        public HttpResponseMessage GetAllDepartmentNames()
+        public IQueryable<Department> GetAllDepartmentNames()
         {
-            string query = @" select DepartmentName from dbo.Department";
-            DataTable table = new DataTable();
-
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-            using (var cmd = new SqlCommand(query, con))
-            using (var da = new SqlDataAdapter(cmd))
-            {
-                cmd.CommandType = CommandType.Text;
-                da.Fill(table);
-            }
-            return Request.CreateResponse(HttpStatusCode.OK, table);
-
+            return db.Departments;
         }
 
-        [Route ("api/Employee/SaveFile")]
+        //[Route("api/Employee/GetAllDepartmentNames")]
+        //[HttpGet]
+        //public HttpResponseMessage GetAllDepartmentNames()
+        //{
+        //    string query = @" select DepartmentName from dbo.Department";
+        //    DataTable table = new DataTable();
+
+        //    {
+        //        cmd.CommandType = CommandType.Text;
+        //        da.Fill(table);
+        //    }
+        //    return Request.CreateResponse(HttpStatusCode.OK, table);
+
+        //}
+
+        [Route("api/Employee/SaveFile")]
         public string SaveFile()
         {
             try
@@ -152,10 +128,24 @@ namespace WebApplication1.Controllers
 
                 return filename;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return "anonymous.png";
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool EmployeeExists(int id)
+        {
+            return db.Employees.Count(e => e.EmployeeID == id) > 0;
         }
     }
 }

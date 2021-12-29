@@ -15,7 +15,10 @@ export class ShowEmpComponent implements OnInit {
   ModalTitle!: string;
   ActivateAddEditEmpComp:boolean=false; 
   emp:any;
+  p: number =1;
 
+  EmployeeID!: string;
+  EmployeeName!: string;
   EmployeeIDFilter!: string;
   EmployeeNameFilter!: string;
   EmployeeListWithoutFilter: any=[];
@@ -36,7 +39,7 @@ export class ShowEmpComponent implements OnInit {
     this.ActivateAddEditEmpComp=true;
     // console.log(this.emp.PhotoFileName);
   }
-
+ 
   editClick(item: any){
     console.log(item);
     this.emp=item;
@@ -65,28 +68,41 @@ export class ShowEmpComponent implements OnInit {
     })
     }
   
-  FilterFn(){
+  FilterIDFn(){
     var EmployeeIDFilter = this.EmployeeIDFilter;
-    var EmployeeNameFilter = this.EmployeeNameFilter;
 
     this.EmployeeList = this.EmployeeListWithoutFilter.filter(function (el: any){
       return el.EmployeeID.toString().toLowerCase().includes(
-        EmployeeIDFilter.toString().trim().toLowerCase()) && 
-        el.EmployeeName.toString().toLowerCase().includes(
+        EmployeeIDFilter.toString().trim().toLowerCase())
+    });
+  }
+
+    
+  FilterNameFn(){
+    var EmployeeNameFilter = this.EmployeeNameFilter;
+
+    this.EmployeeList = this.EmployeeListWithoutFilter.filter(function (el: any){
+      return el.EmployeeName.toString().toLowerCase().includes(
         EmployeeNameFilter.toString().trim().toLowerCase())
     });
   }
 
-  sortResult(prop: any,asc: any){
-    this.EmployeeList = this.EmployeeListWithoutFilter.sort(
-      function(a: any,b : any){
-        if (asc) {
-          return (a[prop]>b[prop])?1:(a[prop]<b[prop]?-1:0);
-        }else{
-          return (b[prop]>a[prop])?1:(b[prop]<a[prop]?-1:0);
-        }
-      }
-    )
-  }
+  key: string = "EmployeeID";
+  reverse: boolean = false;
+  Sort(key: string): void{
+    this.key = key;
+    this.reverse = !this.reverse;
+  } 
+  // sortResult(prop: any,asc: any){
+  //   this.EmployeeList = this.EmployeeListWithoutFilter.sort(
+  //     function(a: any,b : any){
+  //       if (asc) {
+  //         return (a[prop]>b[prop])?1:(a[prop]<b[prop]?-1:0);
+  //       }else{
+  //         return (b[prop]>a[prop])?1:(b[prop]<a[prop]?-1:0);
+  //       }
+  //     }
+  //   )
+  // }
 
 }

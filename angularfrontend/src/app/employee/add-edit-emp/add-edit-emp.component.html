@@ -6,16 +6,16 @@
         <input type="text" class="form-control" placeholder="Enter Employee Name"
         name="EmployeeName" required [(ngModel)]="EmployeeName">
         <!-- <input type="text" class="form-control" placeholder="Enter Employee Name"
-        name="EmployeeName" EmployeeName required [(ngModel)]="EmployeeName" #EmployeeName="ngModel">
-        <span class="help-block" *ngIf="EmployeeName.invalid && EmployeeName.touched">
-        The name is required..!!
+        name="EmployeeName" EmployeeName required [(ngModel)]="EmployeeName" #EmployeeName="ngModel"> -->
+        <!-- <span class="help-block" *ngIf="EmployeeName.invalid && EmployeeName.touched">
+        The name is required..!!!
         </span> -->
         <!-- <input type="text" #EmployeeName="ngModel" [ngModel]="emp.EmployeeName" name="EmployeeName" 
         [class.is-invalid]= "EmployeeName.invalid && EmployeeName.touched" class="form-control" id="EmployeeName" 
         placeholder="Enter EmployeeName" required>
         <small class="text-danger" [class.d-none]= "EmployeeName.valid || EmployeeName.untouched">
             Please enter a EmployeeName</small> -->
-    </div>
+    </div> 
     <label class="col-form-label">Department</label>
     <div class="col=sm-10">
         <select class="form-control" [(ngModel)]="Department">

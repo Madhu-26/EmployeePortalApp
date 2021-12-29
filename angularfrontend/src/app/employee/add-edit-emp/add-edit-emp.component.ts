@@ -52,7 +52,7 @@ export class AddEditEmpComponent implements OnInit {
       EmployeeName:this.EmployeeName,
       Department:this.Department,
       DateOfJoin:this.DateOfJoin,
-      PhotoFileName:this.PhotoFileName};
+      PhotoFileName:this.PhotoFileName}; 
       this.service.updateEmployee(val).subscribe(res=>{
         alert(res.toString());
       });
@@ -61,7 +61,7 @@ export class AddEditEmpComponent implements OnInit {
   uploadPhoto(event: any){
     var file=event.target.files[0];
     const formData:FormData=new FormData();
-    formData.append('uploadedFile',file,file.name);
+    formData.append('uploadedFile',file,file.name); 
 
     this.service.UploadPhoto(formData).subscribe((data:any)=>{
       this.PhotoFileName=data.toString();

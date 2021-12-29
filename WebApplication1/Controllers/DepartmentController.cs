@@ -1,110 +1,107 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using WebApplication1.Models;
+using System.Web.Http.Cors;
 
 namespace WebApplication1.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class DepartmentController : ApiController
     {
-        //Get
-        public HttpResponseMessage Get()
+        private Model1 db = new Model1();
+
+        // GET: api/Department
+        public IQueryable<Department> GetDepartments()
         {
-            string query = @"select DepartmentID, DepartmentName from dbo.Department";
-            DataTable table = new DataTable();
-
-            using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-            using (var cmd = new SqlCommand(query, con))
-            using (var da = new SqlDataAdapter(cmd))
-            {
-                cmd.CommandType = CommandType.Text;
-                da.Fill(table);
-            }
-
-            return Request.CreateResponse(HttpStatusCode.OK, table);
+            return db.Departments;
         }
 
-        //Post
-        public string Post(Department dep)
+        // PUT: api/Department/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutDepartment(int id, Department department)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != department.DepartmentID)
+            {
+                return BadRequest();
+            }
+
+            db.Entry(department).State = EntityState.Modified;
+
             try
             {
-                string query = @" insert into dbo.Department values ('" + dep.DepartmentName + @"') ";
-                DataTable table = new DataTable();
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Added Successfully!!!";
+                db.SaveChanges();
             }
-            catch(Exception)
+            catch (DbUpdateConcurrencyException)
             {
-                return "Failed to Add!!!";
+                if (!DepartmentExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return StatusCode(HttpStatusCode.OK);
         }
 
-        //Put
-        public string Put(Department dep)
+        // POST: api/Department
+        [ResponseType(typeof(Department))]
+        public IHttpActionResult PostDepartment(Department department)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                string query = @" update dbo.Department set DepartmentName = '" + dep.DepartmentName + @"' where DepartmentID = " + dep.DepartmentID + @"";
-                DataTable table = new DataTable();
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Updated Successfully!!!";
+                return BadRequest(ModelState);
             }
-            catch (Exception)
-            {
-                return "Failed to Update!!!";
-            }
+
+            db.Departments.Add(department);
+            db.SaveChanges();
+
+            return CreatedAtRoute("DefaultApi", new { id = department.DepartmentID }, department);
         }
 
-        //Delete
-        public string Delete(int id)
+        // DELETE: api/Department/5
+        [ResponseType(typeof(Department))]
+        public IHttpActionResult DeleteDepartment(int id)
         {
-            try
+            Department department = db.Departments.Find(id);
+            if (department == null)
             {
-                string query = @" delete from dbo.Department where DepartmentID = " + id + @"";
-                DataTable table = new DataTable();
-
-                using (var con = new SqlConnection(ConfigurationManager.ConnectionStrings["EmployeeAppDB"].ConnectionString))
-
-                using (var cmd = new SqlCommand(query, con))
-                using (var da = new SqlDataAdapter(cmd))
-                {
-                    cmd.CommandType = CommandType.Text;
-                    da.Fill(table);
-                }
-
-                return "Deleted Successfully!!!";
+                return NotFound();
             }
-            catch (Exception)
-            {
-                return "Failed to Delete!!!";
-            }
+
+            db.Departments.Remove(department);
+            db.SaveChanges();
+
+            return Ok(department);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        private bool DepartmentExists(int id)
+        {
+            return db.Departments.Count(e => e.DepartmentID == id) > 0;
+        }
     }
 }
