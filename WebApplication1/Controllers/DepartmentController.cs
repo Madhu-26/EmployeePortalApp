@@ -13,7 +13,8 @@ using System.Web.Http.Cors;
 
 namespace WebApplication1.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors("*", "*", "*")]
     public class DepartmentController : ApiController
     {
         private Model1 db = new Model1();
@@ -25,6 +26,7 @@ namespace WebApplication1.Controllers
         }
 
         // PUT: api/Department/5
+        [HttpPut]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutDepartment(int id, Department department)
         {

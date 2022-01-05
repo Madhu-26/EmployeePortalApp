@@ -26,7 +26,6 @@ namespace WebApplication1
 
             var cors = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(cors);
-
         }
     }
 }

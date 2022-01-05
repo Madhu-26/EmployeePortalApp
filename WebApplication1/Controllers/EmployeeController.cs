@@ -27,7 +27,7 @@ namespace WebApplication1.Controllers
 
         // PUT: api/Employee/5
         [ResponseType(typeof(void))]
-       [HttpPut]
+        [HttpPut]
        [Route("api/Employee/{id}")]
         public IHttpActionResult PutEmployee(int id, Employee employee)
         {
